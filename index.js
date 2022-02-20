@@ -33,18 +33,20 @@ addEventListener('click', function(event){
   };
   
   const projectile = new Projectile(position, speed, 10, '#AAAAAA');
-  console.log(projectile);
   projectiles.push(projectile);
+
 }, false);
 
 function animate(){
   requestAnimationFrame(animate);
+  c.clearRect(0, 0, canvas.width, canvas.height);
+  
+  player.draw();
   projectiles.forEach((projectile, index) => {
     projectile.update();
   });
 }
 
-player.draw();
 animate();
 
 

@@ -13,6 +13,7 @@ const position = assemble(canvas.width / 2, canvas.height / 2);
 
 let player = new Player(position, 60, '#FF0000');
 var projectiles = [];
+var enemies = [];
 
 //Whenever the player clicks on the screen it creates a projectile in the same direction 
 addEventListener('click', function(event){
@@ -29,6 +30,17 @@ addEventListener('click', function(event){
 
 }, false);
 
+function spawnEnemies(){
+  setInterval(function(){
+    const position = assemble(100, 100);
+    const speed = assemble(1, 1);
+
+    const enemy = new Enemy(position, speed, 20, '#8800FF');
+    enemies.push(enemy);
+
+  }, spawnDelay);
+}
+
 function animate(){
   requestAnimationFrame(animate);
 
@@ -38,6 +50,10 @@ function animate(){
   player.draw();
   projectiles.forEach((projectile, index) => {
     projectile.update();
+  });
+
+  enemies.forEach((enemy, index) => {
+    enemy.update();
   });
 }
 
@@ -51,4 +67,5 @@ function assemble(x, y){
 }
 
 animate();
+spawnEnemies();
 

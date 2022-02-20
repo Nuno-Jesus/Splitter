@@ -14,4 +14,10 @@ export class Projectile{
     c.fillStyle = this.color;
     c.fill();
   }
+
+  update(){
+    this.draw();
+    this.position.x += this.speed.x;
+    this.position.y += this.speed.y;
+  }
 }

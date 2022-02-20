@@ -12,7 +12,34 @@ const position = {
   y : canvas.height / 2
 };
 
+var projectiles = [];
+
 let player = new Player(position, 60, '#FF0000');
+
+addEventListener('click', function(event){
+  const x = event.clientX - canvas.width / 2;
+  const y = event.clientY - canvas.height / 2;
+
+  const angle = Math.atan2(y, x);
+  
+  const speed = {
+    x : Math.cos(angle),
+    y : Math.sin(angle)
+  };
+
+  const position = {
+    x: event.clientX,
+    y: event.clientY
+  };
+  
+  const projectile = new Projectile(position, speed, 10, '#AAAAAA');
+  projectiles.push(projectile);
+
+  projectiles.forEach((projectile, index) => {
+    projectile.draw();
+  });
+}, false);
+
 
 //console.log(player);
 

@@ -7,30 +7,19 @@ export const c = canvas.getContext("2d");
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
-const position = {
-  x : canvas.width / 2,
-  y : canvas.height / 2
-};
-
-var projectiles = [];
+const position = assemble(canvas.width / 2, canvas.height / 2);
 
 let player = new Player(position, 60, '#FF0000');
+var projectiles = [];
 
 addEventListener('click', function(event){
   const x = event.clientX - canvas.width / 2;
   const y = event.clientY - canvas.height / 2;
 
   const angle = Math.atan2(y, x);
-  
-  const speed = {
-    x : Math.cos(angle),
-    y : Math.sin(angle)
-  };
 
-  const position = {
-    x: canvas.width / 2,
-    y: canvas.height / 2
-  };
+  const speed = assemble(Math.cos(angle), Math.sin(angle));
+  const position = assemble(canvas.width / 2, canvas.height / 2);
   
   const projectile = new Projectile(position, speed, 10, '#AAAAAA');
   projectiles.push(projectile);
@@ -45,6 +34,15 @@ function animate(){
   projectiles.forEach((projectile, index) => {
     projectile.update();
   });
+}
+
+function assemble(x, y){
+  const property = {
+    x: x,
+    y: y
+  };
+
+  return property;
 }
 
 animate();

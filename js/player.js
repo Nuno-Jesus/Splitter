@@ -1,4 +1,4 @@
-import {canvas, c} from './../index.js';
+import {c} from './../index.js';
 
 export class Player{
   constructor(position, radius, color){

@@ -32,10 +32,16 @@ addEventListener('click', function(event){
 
 function spawnEnemies(){
   setInterval(function(){
-    const position = assemble(100, 100);
-    const speed = assemble(1, 1);
+    const radius = Math.ceil(Math.random() * 30 + 20);
+    const position = generateCoordinates(radius);
 
-    const enemy = new Enemy(position, speed, 20, '#8800FF');
+    const deltaX = canvas.width / 2 - position.x;
+    const deltaY = canvas.height / 2 - position.y;
+    const angle = Math.atan2(deltaY, deltaX);
+
+    const speed = assemble(Math.cos(angle), Math.sin(angle));
+    
+    const enemy = new Enemy(position, speed, radius, '#8800FF');
     enemies.push(enemy);
 
   }, spawnDelay);
@@ -64,6 +70,29 @@ function assemble(x, y){
   };
 
   return property;
+}
+
+function generateCoordinates(radius){
+  let position = {
+    x : 0,
+    y : 0
+  };
+
+  //Generate horizontally
+  if(Math.random() < 0.5){
+    position.x = Math.ceil(Math.random() * canvas.width);
+    //Generate either on top or bottom
+    position.y = Math.random() < 0.5 ? -radius : canvas.height + radius;
+  }
+
+  //Generate vertically
+  else{
+    position.y = Math.ceil(Math.random() * canvas.height);
+    //Generate either on the left or right
+    position.x = Math.random() < 0.5 ? -radius : canvas.width + radius;
+  }
+
+  return position;
 }
 
 animate();

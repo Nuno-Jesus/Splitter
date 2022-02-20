@@ -1,4 +1,5 @@
 import {Player} from './js/player.js';
+import { Projectile } from './js/projectile.js';
 
 export const canvas = document.querySelector('canvas');
 export const c = canvas.getContext("2d");
@@ -12,6 +13,9 @@ const position = {
 };
 
 let player = new Player(position, 60, '#FF0000');
-console.log(player);
+
+//console.log(player);
+
 player.draw();
+
 

@@ -38,7 +38,7 @@ addEventListener('click', function(event){
 
 
 function animate(){
-  requestAnimationFrame(animate);
+  let frame = requestAnimationFrame(animate);
 
   //Clears the previous frame
   c.clearRect(0, 0, canvas.width, canvas.height);
@@ -51,6 +51,11 @@ function animate(){
 
   enemies.forEach((enemy, index) => {
     enemy.update();
+
+    //Disrupts the recursive call of the animation function, halting the game if an enemy touches the player
+    if(distance(player.position, enemy.position) <= (player.radius + enemy.radius)){
+      cancelAnimationFrame(frame);
+    }
   });
 
   projectiles.forEach((projectile, projectileIndex) => {

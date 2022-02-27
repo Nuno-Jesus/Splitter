@@ -36,22 +36,6 @@ addEventListener('click', function(event){
 
 //!--------------------------------- FUNCTIONS ---------------------------------
 
-function spawnEnemies(){
-  setInterval(function(){
-    const radius = Math.ceil(Math.random() * 30 + 20);
-    const position = generateCoordinates(radius);
-
-    const deltaX = canvas.width / 2 - position.x;
-    const deltaY = canvas.height / 2 - position.y;
-    const angle = Math.atan2(deltaY, deltaX);
-
-    const speed = assemble(enemyMultiplier * Math.cos(angle), enemyMultiplier * Math.sin(angle));
-    
-    const enemy = new Enemy(position, speed, radius, '#8800FF');
-    enemies.push(enemy);
-
-  }, spawnEnemyDelay);
-}
 
 function animate(){
   requestAnimationFrame(animate);
@@ -60,6 +44,7 @@ function animate(){
   c.clearRect(0, 0, canvas.width, canvas.height);
   
   player.draw();
+
   projectiles.forEach((projectile, index) => {
     projectile.update();
   });
@@ -78,13 +63,21 @@ function animate(){
   }); 
 }
 
-function assemble(x, y){
-  const property = {
-    x: x,
-    y: y
-  };
+function spawnEnemies(){
+  setInterval(function(){
+    const radius = Math.ceil(Math.random() * 30 + 20);
+    const position = generateCoordinates(radius);
 
-  return property;
+    const deltaX = canvas.width / 2 - position.x;
+    const deltaY = canvas.height / 2 - position.y;
+    const angle = Math.atan2(deltaY, deltaX);
+
+    const speed = assemble(enemyMultiplier * Math.cos(angle), enemyMultiplier * Math.sin(angle));
+    
+    const enemy = new Enemy(position, speed, radius, '#8800FF');
+    enemies.push(enemy);
+
+  }, spawnEnemyDelay);
 }
 
 function generateCoordinates(radius){
@@ -112,6 +105,15 @@ function generateCoordinates(radius){
 
 function distance(p1, p2){
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+}
+
+function assemble(x, y){
+  const property = {
+    x: x,
+    y: y
+  };
+
+  return property;
 }
 
 animate();

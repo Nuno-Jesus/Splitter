@@ -9,6 +9,10 @@ const spawnDelay = 1000;
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
+const projectileMultiplier = 4;
+const enemyMultiplier = 1;
+
+//Position of the player
 const position = assemble(canvas.width / 2, canvas.height / 2);
 
 let player = new Player(position, 60, '#FF0000');
@@ -22,13 +26,16 @@ addEventListener('click', function(event){
 
   const angle = Math.atan2(y, x);
 
-  const speed = assemble(Math.cos(angle), Math.sin(angle));
+  const speed = assemble(projectileMultiplier * Math.cos(angle), projectileMultiplier * Math.sin(angle));
   const position = assemble(canvas.width / 2, canvas.height / 2);
   
   const projectile = new Projectile(position, speed, 10, '#AAAAAA');
   projectiles.push(projectile);
 
 }, false);
+
+
+//!--------------------------------- FUNCTIONS ---------------------------------
 
 function spawnEnemies(){
   setInterval(function(){
@@ -39,7 +46,7 @@ function spawnEnemies(){
     const deltaY = canvas.height / 2 - position.y;
     const angle = Math.atan2(deltaY, deltaX);
 
-    const speed = assemble(Math.cos(angle), Math.sin(angle));
+    const speed = assemble(enemyMultiplier * Math.cos(angle), enemyMultiplier * Math.sin(angle));
     
     const enemy = new Enemy(position, speed, radius, '#8800FF');
     enemies.push(enemy);

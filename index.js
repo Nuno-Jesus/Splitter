@@ -4,17 +4,16 @@ import { Projectile } from './js/projectile.js';
 
 export const canvas = document.querySelector('canvas');
 export const c = canvas.getContext("2d");
-const spawnDelay = 1000;
+
+const spawnEnemyDelay = 1000;
+const projectileMultiplier = 4;
+const enemyMultiplier = 1;
 
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
-const projectileMultiplier = 4;
-const enemyMultiplier = 1;
-
 //Position of the player
 const position = assemble(canvas.width / 2, canvas.height / 2);
-
 let player = new Player(position, 60, '#FF0000');
 var projectiles = [];
 var enemies = [];
@@ -51,7 +50,7 @@ function spawnEnemies(){
     const enemy = new Enemy(position, speed, radius, '#8800FF');
     enemies.push(enemy);
 
-  }, spawnDelay);
+  }, spawnEnemyDelay);
 }
 
 function animate(){
@@ -68,6 +67,15 @@ function animate(){
   enemies.forEach((enemy, index) => {
     enemy.update();
   });
+
+  projectiles.forEach((projectile, projectileIndex) => {
+    enemies.forEach((enemy, enemyIndex) => {
+      if(distance(projectile.position, enemy.position) <= (projectile.radius + enemy.radius)){
+        enemies.splice(enemyIndex, 1);
+        projectiles.splice(projectileIndex, 1);
+      }
+    });
+  }); 
 }
 
 function assemble(x, y){
@@ -100,6 +108,10 @@ function generateCoordinates(radius){
   }
 
   return position;
+}
+
+function distance(p1, p2){
+  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 }
 
 animate();

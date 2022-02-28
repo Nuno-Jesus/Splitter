@@ -1,6 +1,7 @@
 import { Player } from './js/player.js';
 import { Enemy } from './js/enemy.js';
 import { Projectile } from './js/projectile.js';
+import { Particle } from './js/particle.js';
 
 export const canvas = document.querySelector('canvas');
 export const c = canvas.getContext("2d");
@@ -15,7 +16,10 @@ canvas.width = window.innerWidth;
 //Position of the player
 const position = assemble(canvas.width / 2, canvas.height / 2);
 let player = new Player(position, 60, playerColor);
+
+//Entities
 var projectiles = [];
+var particles = [];
 var enemies = [];
 
 //Whenever the player clicks on the screen it creates a projectile in the same direction 
@@ -42,8 +46,6 @@ function animate(){
   //Clears the previous frame
   c.fillStyle = 'rgb(0, 0, 0, 0.1)';
   c.fillRect(0, 0, canvas.width, canvas.height);
-  
-  player.draw();
 
   //Updated projectiles positions
   projectiles.forEach((projectile, index) => {
@@ -62,18 +64,50 @@ function animate(){
     }
   });
 
+  particles.forEach((particle, index) => {
+    particle.update();
+
+    if(particle.alpha <= 0.1)
+      particles.splice(index, 1);
+  })
+
   //Checks for collisions between projectiles and enemies
   projectiles.forEach((projectile, projectileIndex) => {
     enemies.forEach((enemy, enemyIndex) => {
       if(distance(projectile.position, enemy.position) <= (projectile.radius + enemy.radius)){
+        
+        //Generate particles
+        for(let i = 0; i < enemy.radius * 2 ; i++){
+          const color = enemy.color;
+          const radius = Math.random() * 2 + 0.5;
+          const position = {
+            x : enemy.position.x,
+            y : enemy.position.y
+          };
+          const speed = {
+            x : 7 * Math.random() * Math.cos(Math.random() * 2 * Math.PI),
+            y : 7 * Math.random() * Math.sin(Math.random() * 2 * Math.PI)
+          };
+
+          const particle = new Particle(position, speed, radius, color);
+          particles.push(particle);
+        }
+        
+        //Shrink enemy
         gsap.to(enemy, {radius: enemy.radius - 20});
+        
+        //If the enemy is too small, kill it
         if(enemy.radius - 20 <= 20)
           enemies.splice(enemyIndex, 1);
 
+        //Take the projectile out
         projectiles.splice(projectileIndex, 1);
+
       }
     });
   }); 
+
+  player.draw();
 }
 
 function spawnEnemies(){
@@ -85,7 +119,7 @@ function spawnEnemies(){
     const deltaY = canvas.height / 2 - position.y;
     const angle = Math.atan2(deltaY, deltaX);
 
-    let multiplier = Math.random() + 1;
+    let multiplier = Math.random() + 0.5;
     const speed = assemble(multiplier * Math.cos(angle), multiplier * Math.sin(angle));
     const color = generateRGB();
     

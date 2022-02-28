@@ -66,7 +66,10 @@ function animate(){
   projectiles.forEach((projectile, projectileIndex) => {
     enemies.forEach((enemy, enemyIndex) => {
       if(distance(projectile.position, enemy.position) <= (projectile.radius + enemy.radius)){
-        enemies.splice(enemyIndex, 1);
+        gsap.to(enemy, {radius: enemy.radius - 20});
+        if(enemy.radius - 20 <= 20)
+          enemies.splice(enemyIndex, 1);
+
         projectiles.splice(projectileIndex, 1);
       }
     });

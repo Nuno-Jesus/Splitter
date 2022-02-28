@@ -7,7 +7,6 @@ export const c = canvas.getContext("2d");
 
 const spawnEnemyDelay = 500;
 const projectileMultiplier = 4;
-const enemyMultiplier = 1;
 const playerColor = '#FFFFFF';
 
 canvas.height = window.innerHeight;
@@ -80,7 +79,8 @@ function spawnEnemies(){
     const deltaY = canvas.height / 2 - position.y;
     const angle = Math.atan2(deltaY, deltaX);
 
-    const speed = assemble(enemyMultiplier * Math.cos(angle), enemyMultiplier * Math.sin(angle));
+    let multiplier = Math.random() + 1;
+    const speed = assemble(multiplier * Math.cos(angle), multiplier * Math.sin(angle));
     const color = generateRGB();
     
     const enemy = new Enemy(position, speed, radius, color);
@@ -95,17 +95,15 @@ function generateCoordinates(radius){
     y : 0
   };
 
-  //Generate horizontally
+  //Generate horizontally (top or bottom)
   if(Math.random() < 0.5){
     position.x = Math.ceil(Math.random() * canvas.width);
-    //Generate either on top or bottom
     position.y = Math.random() < 0.5 ? -radius : canvas.height + radius;
   }
 
-  //Generate vertically
+  //Generate vertically (left or right)
   else{
     position.y = Math.ceil(Math.random() * canvas.height);
-    //Generate either on the left or right
     position.x = Math.random() < 0.5 ? -radius : canvas.width + radius;
   }
 

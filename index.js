@@ -22,15 +22,16 @@ var enemies = [];
 addEventListener('click', function(event){
   const x = event.clientX - canvas.width / 2;
   const y = event.clientY - canvas.height / 2;
-
+  
   const angle = Math.atan2(y, x);
-
+  
   const speed = assemble(projectileMultiplier * Math.cos(angle), projectileMultiplier * Math.sin(angle));
   const position = assemble(canvas.width / 2, canvas.height / 2);
   
   const projectile = new Projectile(position, speed, 10, '#AAAAAA');
   projectiles.push(projectile);
-
+  
+  console.table(projectiles);
 }, false);
 
 
@@ -47,6 +48,8 @@ function animate(){
 
   projectiles.forEach((projectile, index) => {
     projectile.update();
+    if(is_outside_canvas(projectile.position))
+      projectiles.splice(index, 1);
   });
 
   enemies.forEach((enemy, index) => {
@@ -106,6 +109,10 @@ function generateCoordinates(radius){
   }
 
   return position;
+}
+
+function is_outside_canvas(position){
+  return (position.x > canvas.width || position.x < 0 || position.y > canvas.height || position.y < 0);
 }
 
 function distance(p1, p2){

@@ -45,12 +45,14 @@ function animate(){
   
   player.draw();
 
+  //Updated projectiles positions
   projectiles.forEach((projectile, index) => {
     projectile.update();
     if(is_outside_canvas(projectile.position))
       projectiles.splice(index, 1);
   });
 
+  //Updates enemies positions
   enemies.forEach((enemy, index) => {
     enemy.update();
 
@@ -60,6 +62,7 @@ function animate(){
     }
   });
 
+  //Checks for collisions between projectiles and enemies
   projectiles.forEach((projectile, projectileIndex) => {
     enemies.forEach((enemy, enemyIndex) => {
       if(distance(projectile.position, enemy.position) <= (projectile.radius + enemy.radius)){

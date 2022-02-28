@@ -5,16 +5,17 @@ import { Projectile } from './js/projectile.js';
 export const canvas = document.querySelector('canvas');
 export const c = canvas.getContext("2d");
 
-const spawnEnemyDelay = 1000;
+const spawnEnemyDelay = 500;
 const projectileMultiplier = 4;
 const enemyMultiplier = 1;
+const playerColor = '#FFFFFF';
 
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
 //Position of the player
 const position = assemble(canvas.width / 2, canvas.height / 2);
-let player = new Player(position, 60, '#FF0000');
+let player = new Player(position, 60, playerColor);
 var projectiles = [];
 var enemies = [];
 
@@ -28,10 +29,8 @@ addEventListener('click', function(event){
   const speed = assemble(projectileMultiplier * Math.cos(angle), projectileMultiplier * Math.sin(angle));
   const position = assemble(canvas.width / 2, canvas.height / 2);
   
-  const projectile = new Projectile(position, speed, 10, '#AAAAAA');
+  const projectile = new Projectile(position, speed, 10, playerColor);
   projectiles.push(projectile);
-  
-  console.table(projectiles);
 }, false);
 
 
@@ -42,7 +41,8 @@ function animate(){
   let frame = requestAnimationFrame(animate);
 
   //Clears the previous frame
-  c.clearRect(0, 0, canvas.width, canvas.height);
+  c.fillStyle = 'rgb(0, 0, 0, 0.1)';
+  c.fillRect(0, 0, canvas.width, canvas.height);
   
   player.draw();
 
@@ -81,8 +81,9 @@ function spawnEnemies(){
     const angle = Math.atan2(deltaY, deltaX);
 
     const speed = assemble(enemyMultiplier * Math.cos(angle), enemyMultiplier * Math.sin(angle));
+    const color = generateRGB();
     
-    const enemy = new Enemy(position, speed, radius, '#8800FF');
+    const enemy = new Enemy(position, speed, radius, color);
     enemies.push(enemy);
 
   }, spawnEnemyDelay);
@@ -109,6 +110,14 @@ function generateCoordinates(radius){
   }
 
   return position;
+}
+
+function generateRGB(){
+  const r = Math.random() * 255;
+  const g = Math.random() * 255;
+  const b = Math.random() * 255;
+
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
 
 function is_outside_canvas(position){
